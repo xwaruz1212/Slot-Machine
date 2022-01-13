@@ -13,11 +13,13 @@ app.loader
     .add('images/bananas.png', 'images/bananas.png')
     .add('images/cat.png', 'images/cat.png')
     .add('images/cherry.png', 'images/cherry.png')
+    .add('images/startbutton.png', 'images/startbutton.png')
     .load(onAssetsLoaded);
 
 
-const REEL_WIDTH = 160;
+const REEL_SIZE = 160;
 const SYMBOL_SIZE = 150;
+
 
 const center = 300
 
@@ -38,9 +40,10 @@ function onAssetsLoaded() {
         for (let i=0 ; i < 4 ; i++){
             
             const symbol = new PIXI.Sprite(slotTextures[Math.floor(Math.random() * slotTextures.length)]);
-            symbol.y = 1.5* j * SYMBOL_SIZE;
-            symbol.x = 1.5* i * SYMBOL_SIZE + center;
-
+            symbol.y = j * REEL_SIZE;
+            symbol.x = i * REEL_SIZE + center;
+            symbol.width = SYMBOL_SIZE;
+            symbol.height = SYMBOL_SIZE;
             console.log(symbol.y , " ", symbol.x);
 
 
@@ -49,10 +52,14 @@ function onAssetsLoaded() {
         }
         
     }
-
-
+   
+    const startbutton = PIXI.Sprite.from('images/startbutton.png');
+    startbutton.x = 450;
+    startbutton.y = 500;
+    app.stage.addChild(startbutton);
 
 }
+
 
 
 
