@@ -53,10 +53,15 @@ function onAssetsLoaded() {
         
     }
    
-    const startbutton = PIXI.Sprite.from('images/startbutton.png');
+    const startbutton = new PIXI.Sprite.from('images/startbutton.png');
     startbutton.x = 450;
     startbutton.y = 500;
     app.stage.addChild(startbutton);
+
+    //spin interactivity
+    startbutton.interactive = true;
+    startbutton.buttonMode = true;
+    
 
 }
 
