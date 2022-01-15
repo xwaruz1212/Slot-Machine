@@ -1,6 +1,6 @@
 
 
-const app = new PIXI.Application({backgroundColor: 0x000000});
+const app = new PIXI.Application({backgroundColor: 0x2ead9e});
 document.body.appendChild(app.view);
 
 app.renderer.resize(window.innerWidth, window.innerHeight);
@@ -40,7 +40,7 @@ function onAssetsLoaded() {
         for (let i=0 ; i < 4 ; i++){
             
             const symbol = new PIXI.Sprite(slotTextures[Math.floor(Math.random() * slotTextures.length)]);
-            symbol.y = j * REEL_SIZE;
+            symbol.y = j * REEL_SIZE + 100;
             symbol.x = i * REEL_SIZE + center;
             symbol.width = SYMBOL_SIZE;
             symbol.height = SYMBOL_SIZE;
@@ -52,15 +52,39 @@ function onAssetsLoaded() {
         }
         
     }
+
+    const style = new PIXI.TextStyle({
+        dropShadow: true,
+        dropShadowAlpha: 10,
+        dropShadowColor: "#3a3636",
+        fill: [
+            "white",
+            "#6e6e6e"
+        ],
+        fontFamily: "\"Times New Roman\", Times, serif",
+        fontSize: 40,
+        fontStyle: "italic",
+        fontWeight: "bolder",
+        letterSpacing: 20,
+        lineJoin: "round",
+        stroke: "#0a0000",
+        strokeThickness: 6
+    });
    
-    const startbutton = new PIXI.Sprite.from('images/startbutton.png');
-    startbutton.x = 450;
-    startbutton.y = 500;
+    const startbutton = new PIXI.Sprite.from('images/spinbutton.png');
+    startbutton.x = 460;
+    startbutton.y = 600;
     app.stage.addChild(startbutton);
 
     //spin interactivity
     startbutton.interactive = true;
     startbutton.buttonMode = true;
+
+    const titleText = new PIXI.Text('LUCKY DUCKY SLOTS', style)
+    titleText.x = 270;
+    titleText.y = 50;
+
+    app.stage.addChild(titleText);
     
 
 }
