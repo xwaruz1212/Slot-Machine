@@ -5,6 +5,16 @@ document.body.appendChild(app.view);
 
 app.renderer.resize(window.innerWidth, window.innerHeight);
 
+const REEL_SIZE = 160;
+const SYMBOL_SIZE = 150;
+
+const center = 300;
+
+var slotTextures;
+
+var symbols = [];
+
+
 
 app.loader
     .add('images/duck.png', 'images/duck.png')
@@ -13,20 +23,14 @@ app.loader
     .add('images/bananas.png', 'images/bananas.png')
     .add('images/cat.png', 'images/cat.png')
     .add('images/cherry.png', 'images/cherry.png')
-    .add('images/startbutton.png', 'images/startbutton.png')
+    .add('images/startbutton.png', 'images/spinbutton.png')
     .load(onAssetsLoaded);
 
-
-const REEL_SIZE = 160;
-const SYMBOL_SIZE = 150;
-
-
-const center = 300
 
 
 function onAssetsLoaded() {
     
-    const slotTextures = [
+    slotTextures = [
         PIXI.Texture.from('images/duck.png'),
         PIXI.Texture.from('images/7.png'),
         PIXI.Texture.from('images/bells.png'),
@@ -35,9 +39,16 @@ function onAssetsLoaded() {
         PIXI.Texture.from('images/cherry.png')
     ];
     
-    //Displaying images in loop
+    displayImages()
+    console.log(symbols);
+    createUI()
+    
+}
+
+
+function displayImages() {
     for (let j=0 ; j < 3 ; j++){
-        for (let i=0 ; i < 4 ; i++){
+        for (let i=0 ; i < 3 ; i++){
             
             const symbol = new PIXI.Sprite(slotTextures[Math.floor(Math.random() * slotTextures.length)]);
             symbol.y = j * REEL_SIZE + 100;
@@ -49,10 +60,14 @@ function onAssetsLoaded() {
 
 
             app.stage.addChild(symbol);
+            symbols.push(symbol);
+
         }
         
     }
+}
 
+function createUI(){
     const style = new PIXI.TextStyle({
         dropShadow: true,
         dropShadowAlpha: 10,
@@ -72,22 +87,25 @@ function onAssetsLoaded() {
     });
    
     const startbutton = new PIXI.Sprite.from('images/spinbutton.png');
-    startbutton.x = 460;
+    startbutton.x = 380;
     startbutton.y = 600;
     app.stage.addChild(startbutton);
 
     //spin interactivity
     startbutton.interactive = true;
     startbutton.buttonMode = true;
+    startbutton.addListener( 'pointerdown', () => {
+        console.log("chill out")
+    })
 
     const titleText = new PIXI.Text('LUCKY DUCKY SLOTS', style)
-    titleText.x = 270;
+    titleText.x = 170;
     titleText.y = 50;
 
     app.stage.addChild(titleText);
-    
 
 }
+
 
 
 
