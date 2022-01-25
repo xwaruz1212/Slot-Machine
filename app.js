@@ -94,9 +94,7 @@ function createUI(){
     //spin interactivity
     startbutton.interactive = true;
     startbutton.buttonMode = true;
-    startbutton.addListener( 'pointerdown', () => {
-        console.log("chill out")
-    })
+    startbutton.addListener( 'pointerdown', onSpinButtonClick)
 
     const titleText = new PIXI.Text('LUCKY DUCKY SLOTS', style)
     titleText.x = 170;
@@ -104,6 +102,20 @@ function createUI(){
 
     app.stage.addChild(titleText);
 
+}
+
+function onSpinButtonClick() {
+    clearImages()
+    displayImages()
+}
+
+function clearImages() {
+    for( let i=0; i<symbols.length ; i++){
+        app.stage.removeChild(symbols[i])
+    }
+
+    symbols.splice(0)
+    
 }
 
 
