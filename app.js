@@ -40,7 +40,6 @@ function onAssetsLoaded() {
     ];
     
     displayImages()
-    console.log(symbols);
     createUI()
     
 }
@@ -48,6 +47,8 @@ function onAssetsLoaded() {
 
 function displayImages() {
     for (let j=0 ; j < 3 ; j++){
+        var row = [];
+
         for (let i=0 ; i < 3 ; i++){
             
             const symbol = new PIXI.Sprite(slotTextures[Math.floor(Math.random() * slotTextures.length)]);
@@ -55,17 +56,20 @@ function displayImages() {
             symbol.x = i * REEL_SIZE + center;
             symbol.width = SYMBOL_SIZE;
             symbol.height = SYMBOL_SIZE;
-            console.log(symbol.y , " ", symbol.x);
-
 
 
             app.stage.addChild(symbol);
-            symbols.push(symbol);
+            row.push(symbol);
+            //console.log(row)
 
         }
         
+        symbols.push(row)
     }
+
+    console.log(symbols)
 }
+
 
 function createUI(){
     const style = new PIXI.TextStyle({
@@ -107,15 +111,39 @@ function createUI(){
 function onSpinButtonClick() {
     clearImages()
     displayImages()
+    ChecktheSymbols()
+    
 }
 
 function clearImages() {
-    for( let i=0; i<symbols.length ; i++){
-        app.stage.removeChild(symbols[i])
+    for( let j=0; j<symbols.length ; j++){
+        for( let i=0; i<symbols[j].length ; i++){
+            app.stage.removeChild(symbols[j][i])
+        }
+        app.stage.removeChild(symbols[j])
     }
 
     symbols.splice(0)
     
+}
+
+function ChecktheSymbols() {
+    for( let j=0; j<symbols.length ; j++) {
+        var temp = symbols[j][0].texture;
+        var check = true;
+
+        for( let i=1; i<symbols[j].length ; i++){
+            
+            if( symbols[j][i].texture != temp) {
+
+                check = false;
+            }
+        }
+        if ( check == true){
+           console.log('WIN');
+        }
+        
+    }
 }
 
 
