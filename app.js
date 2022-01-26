@@ -8,11 +8,11 @@ app.renderer.resize(window.innerWidth, window.innerHeight);
 const REEL_SIZE = 160;
 const SYMBOL_SIZE = 150;
 
-const center = 300;
+const center = 350;
 
 var slotTextures;
 
-var symbols = [];
+var reels = [];
 
 
 
@@ -39,35 +39,42 @@ function onAssetsLoaded() {
         PIXI.Texture.from('images/cherry.png')
     ];
     
-    displayImages()
+    createReels()
     createUI()
     
 }
 
 
-function displayImages() {
-    for (let j=0 ; j < 3 ; j++){
-        var row = [];
 
-        for (let i=0 ; i < 3 ; i++){
-            
+function createReels() {
+
+    var reelContainer = new PIXI.Container();
+    for (let i = 0; i < 3; i++) {
+        const column = new PIXI.Container();
+        column.x = i * REEL_SIZE;
+        reelContainer.addChild(column);
+
+        const reel = {
+            container: column,
+            symbols: [],
+            position: 0,
+            previousPosition: 0,
+        };
+
+        for (let j = 0; j < 3; j++) {
             const symbol = new PIXI.Sprite(slotTextures[Math.floor(Math.random() * slotTextures.length)]);
-            symbol.y = j * REEL_SIZE + 100;
-            symbol.x = i * REEL_SIZE + center;
+            symbol.y = j * SYMBOL_SIZE + 100;
+            symbol.x = i * SYMBOL_SIZE + center;
             symbol.width = SYMBOL_SIZE;
             symbol.height = SYMBOL_SIZE;
-
-
-            app.stage.addChild(symbol);
-            row.push(symbol);
-            //console.log(row)
-
+            reel.symbols.push(symbol);
+            column.addChild(symbol);
         }
-        
-        symbols.push(row)
+        reels.push(reel);
     }
+    app.stage.addChild(reelContainer);
 
-    console.log(symbols)
+    console.log(reels)
 }
 
 
@@ -91,7 +98,7 @@ function createUI(){
     });
    
     const startbutton = new PIXI.Sprite.from('images/spinbutton.png');
-    startbutton.x = 380;
+    startbutton.x = 580;
     startbutton.y = 600;
     app.stage.addChild(startbutton);
 
@@ -101,7 +108,7 @@ function createUI(){
     startbutton.addListener( 'pointerdown', onSpinButtonClick)
 
     const titleText = new PIXI.Text('LUCKY DUCKY SLOTS', style)
-    titleText.x = 170;
+    titleText.x = 370;
     titleText.y = 50;
 
     app.stage.addChild(titleText);
@@ -109,9 +116,9 @@ function createUI(){
 }
 
 function onSpinButtonClick() {
-    clearImages()
-    displayImages()
-    ChecktheSymbols()
+    //clearImages()
+    //displayImages()
+    //ChecktheSymbols()
     
 }
 
@@ -145,8 +152,4 @@ function ChecktheSymbols() {
         
     }
 }
-
-
-
-
 
