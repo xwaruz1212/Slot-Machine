@@ -49,6 +49,9 @@ function onAssetsLoaded() {
 function createReels() {
 
     var reelContainer = new PIXI.Container();
+    reelContainer.x = 500;
+    reelContainer.y = 100;
+    
     for (let i = 0; i < 3; i++) {
         const column = new PIXI.Container();
         column.x = i * REEL_SIZE;
@@ -61,10 +64,10 @@ function createReels() {
             previousPosition: 0,
         };
 
-        for (let j = 0; j < 3; j++) {
+        for (let j = 0; j < 4; j++) {
             const symbol = new PIXI.Sprite(slotTextures[Math.floor(Math.random() * slotTextures.length)]);
-            symbol.y = j * SYMBOL_SIZE + 100;
-            symbol.x = i * SYMBOL_SIZE + center;
+            symbol.y = j * SYMBOL_SIZE;
+            symbol.x = Math.round((SYMBOL_SIZE - symbol.width) / 2);
             symbol.width = SYMBOL_SIZE;
             symbol.height = SYMBOL_SIZE;
             reel.symbols.push(symbol);
@@ -119,7 +122,13 @@ function onSpinButtonClick() {
     //clearImages()
     //displayImages()
     //ChecktheSymbols()
-    
+    for (let i = 0; i < reels.length; i++) {
+        const r = reels[i];
+        const extra = Math.floor(Math.random() * 3);
+        const target = r.position + 10 + i * 5 + extra;
+        const time = 2500 + i * 600 + extra * 600;
+        tweenTo(r, 'position', target, time, backout(0.5), null, i === reels.length - 1 ? tweeningDone : null);
+    }
 }
 
 function clearImages() {
@@ -153,3 +162,85 @@ function ChecktheSymbols() {
     }
 }
 
+function tweeningDone() {
+    running = false;
+}
+
+// Listen for animate update.
+app.ticker.add((delta) => {
+    // Update the slots.
+        for (let i = 0; i < reels.length; i++) {
+            const r = reels[i];
+            // Update blur filter y amount based on speed.
+            // This would be better if calculated with time in mind also. Now blur depends on frame rate.
+            //r.blur.blurY = (r.position - r.previousPosition) * 8;
+            r.previousPosition = r.position;
+
+            // Update symbol positions on reel.
+            for (let j = 0; j < r.symbols.length; j++) {
+                const s = r.symbols[j];
+                const prevy = s.y;
+                s.y = ((r.position + j) % r.symbols.length) * SYMBOL_SIZE - SYMBOL_SIZE;
+                if (s.y < 0 && prevy > SYMBOL_SIZE) {
+                    // Detect going over and swap a texture.
+                    // This should in proper product be determined from some logical reel.
+                    s.texture = slotTextures[Math.floor(Math.random() * slotTextures.length)];
+                    s.scale.x = s.scale.y = Math.min(SYMBOL_SIZE / s.texture.width, SYMBOL_SIZE / s.texture.height);
+                    s.x = Math.round((SYMBOL_SIZE - s.width) / 2);
+                }
+            }
+        }
+});
+
+
+
+// tweening function.
+var running = false;
+const tweening = [];
+function tweenTo(object, property, target, time, easing, onchange, oncomplete) {
+    const tween = {
+        object,
+        property,
+        propertyBeginValue: object[property],
+        target,
+        easing,
+        time,
+        change: onchange,
+        complete: oncomplete,
+        start: Date.now(),
+    };
+
+    tweening.push(tween);
+    return tween;
+}
+// Listen for animate update.
+app.ticker.add((delta) => {
+    const now = Date.now();
+    const remove = [];
+    for (let i = 0; i < tweening.length; i++) {
+        const t = tweening[i];
+        const phase = Math.min(1, (now - t.start) / t.time);
+
+        t.object[t.property] = lerp(t.propertyBeginValue, t.target, t.easing(phase));
+        if (t.change) t.change(t);
+        if (phase === 1) {
+            t.object[t.property] = t.target;
+            if (t.complete) t.complete(t);
+            remove.push(t);
+        }
+    }
+    for (let i = 0; i < remove.length; i++) {
+        tweening.splice(tweening.indexOf(remove[i]), 1);
+    }
+});
+
+// Basic lerp funtion.
+function lerp(a1, a2, t) {
+    return a1 * (1 - t) + a2 * t;
+}
+
+// Backout function from tweenjs.
+// https://github.com/CreateJS/TweenJS/blob/master/src/tweenjs/Ease.js
+function backout(amount) {
+    return (t) => (--t * t * ((amount + 1) * t + amount) + 1);
+}
