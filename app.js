@@ -119,6 +119,9 @@ function createUI(){
 }
 
 function onSpinButtonClick() {
+    if (running) return;
+    running = true;
+    
     for (let i = 0; i < reels.length; i++) {
         const r = reels[i];
         const extra = Math.floor(Math.random() * 3);
