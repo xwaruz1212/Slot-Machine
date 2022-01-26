@@ -119,9 +119,6 @@ function createUI(){
 }
 
 function onSpinButtonClick() {
-    //clearImages()
-    //displayImages()
-    //ChecktheSymbols()
     for (let i = 0; i < reels.length; i++) {
         const r = reels[i];
         const extra = Math.floor(Math.random() * 3);
@@ -129,22 +126,14 @@ function onSpinButtonClick() {
         const time = 2500 + i * 600 + extra * 600;
         tweenTo(r, 'position', target, time, backout(0.5), null, i === reels.length - 1 ? tweeningDone : null);
     }
+
+    //ChecktheSymbols()
 }
 
-function clearImages() {
-    for( let j=0; j<symbols.length ; j++){
-        for( let i=0; i<symbols[j].length ; i++){
-            app.stage.removeChild(symbols[j][i])
-        }
-        app.stage.removeChild(symbols[j])
-    }
 
-    symbols.splice(0)
-    
-}
-
+// TO DO : convert this function
 function ChecktheSymbols() {
-    for( let j=0; j<symbols.length ; j++) {
+    /*for( let j=0; j<symbols.length ; j++) {
         var temp = symbols[j][0].texture;
         var check = true;
 
@@ -159,7 +148,7 @@ function ChecktheSymbols() {
            console.log('WIN');
         }
         
-    }
+    }*/
 }
 
 function tweeningDone() {
@@ -168,22 +157,15 @@ function tweeningDone() {
 
 // Listen for animate update.
 app.ticker.add((delta) => {
-    // Update the slots.
         for (let i = 0; i < reels.length; i++) {
             const r = reels[i];
-            // Update blur filter y amount based on speed.
-            // This would be better if calculated with time in mind also. Now blur depends on frame rate.
-            //r.blur.blurY = (r.position - r.previousPosition) * 8;
             r.previousPosition = r.position;
 
-            // Update symbol positions on reel.
             for (let j = 0; j < r.symbols.length; j++) {
                 const s = r.symbols[j];
                 const prevy = s.y;
                 s.y = ((r.position + j) % r.symbols.length) * SYMBOL_SIZE - SYMBOL_SIZE;
                 if (s.y < 0 && prevy > SYMBOL_SIZE) {
-                    // Detect going over and swap a texture.
-                    // This should in proper product be determined from some logical reel.
                     s.texture = slotTextures[Math.floor(Math.random() * slotTextures.length)];
                     s.scale.x = s.scale.y = Math.min(SYMBOL_SIZE / s.texture.width, SYMBOL_SIZE / s.texture.height);
                     s.x = Math.round((SYMBOL_SIZE - s.width) / 2);
