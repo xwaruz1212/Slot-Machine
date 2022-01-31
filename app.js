@@ -42,16 +42,16 @@ function onAssetsLoaded() {
     createReels()
     createUI()
     
+
+    
 }
 
 
 
 function createReels() {
 
-    var reelContainer = new PIXI.Container();
-    reelContainer.x = 500;
-    reelContainer.y = 100;
-    
+    reelContainer = new PIXI.Container();
+        
     for (let i = 0; i < 3; i++) {
         const column = new PIXI.Container();
         column.x = i * REEL_SIZE;
@@ -77,7 +77,7 @@ function createReels() {
     }
     app.stage.addChild(reelContainer);
 
-    console.log(reels)
+    console.log(reelContainer)
 }
 
 
@@ -114,6 +114,19 @@ function createUI(){
     titleText.x = 370;
     titleText.y = 50;
 
+    const masquerade = (app.screen.height - SYMBOL_SIZE * 3) / 2;
+    reelContainer.y = masquerade;
+    reelContainer.x = 500;
+    const top = new PIXI.Graphics();
+    top.beginFill(0, 1);
+    top.drawRect(0, 0, app.screen.width, masquerade);
+    const bottom = new PIXI.Graphics();
+    bottom.beginFill(0, 1);
+    bottom.drawRect(0, SYMBOL_SIZE * 3 + masquerade, app.screen.width, masquerade);
+    bottom.addChild(startbutton);
+    
+    app.stage.addChild(top);
+    app.stage.addChild(bottom);
     app.stage.addChild(titleText);
 
 }
@@ -135,7 +148,7 @@ function onSpinButtonClick() {
 
 
 // TO DO : convert this function
-function ChecktheSymbols() {
+//function ChecktheSymbols() {
     /*for( let j=0; j<symbols.length ; j++) {
         var temp = symbols[j][0].texture;
         var check = true;
@@ -151,8 +164,8 @@ function ChecktheSymbols() {
            console.log('WIN');
         }
         
-    }*/
-}
+    }
+}*/
 
 function tweeningDone() {
     running = false;
@@ -229,3 +242,4 @@ function lerp(a1, a2, t) {
 function backout(amount) {
     return (t) => (--t * t * ((amount + 1) * t + amount) + 1);
 }
+
