@@ -1,6 +1,4 @@
-
-
-const app = new PIXI.Application({backgroundColor: 0x2ead9e});
+const app = new PIXI.Application({backgroundColor: 0x8e5852});
 document.body.appendChild(app.view);
 
 app.renderer.resize(window.innerWidth, window.innerHeight);
@@ -13,7 +11,6 @@ const center = 350;
 var slotTextures;
 
 var reels = [];
-
 
 
 app.loader
@@ -46,8 +43,6 @@ function onAssetsLoaded() {
     
 }
 
-
-
 function createReels() {
 
     reelContainer = new PIXI.Container();
@@ -77,9 +72,10 @@ function createReels() {
     }
     app.stage.addChild(reelContainer);
 
-    console.log(reelContainer)
-}
+    
 
+    
+}
 
 function createUI(){
     const style = new PIXI.TextStyle({
@@ -114,6 +110,8 @@ function createUI(){
     titleText.x = 370;
     titleText.y = 50;
 
+    const masqueradeColor = new PIXI.FillStyle({color: 0xff0000})
+
     const masquerade = (app.screen.height - SYMBOL_SIZE * 3) / 2;
     reelContainer.y = masquerade;
     reelContainer.x = 500;
@@ -138,34 +136,12 @@ function onSpinButtonClick() {
     for (let i = 0; i < reels.length; i++) {
         const r = reels[i];
         const extra = Math.floor(Math.random() * 3);
-        const target = r.position + 10 + i * 5 + extra;
-        const time = 2500 + i * 600 + extra * 600;
+        const target = r.position + 12 + i * 5 + extra;
+        const time = 2500 + i * 800 + extra * 600;
         tweenTo(r, 'position', target, time, backout(0.5), null, i === reels.length - 1 ? tweeningDone : null);
     }
 
-    //ChecktheSymbols()
 }
-
-
-// TO DO : convert this function
-//function ChecktheSymbols() {
-    /*for( let j=0; j<symbols.length ; j++) {
-        var temp = symbols[j][0].texture;
-        var check = true;
-
-        for( let i=1; i<symbols[j].length ; i++){
-            
-            if( symbols[j][i].texture != temp) {
-
-                check = false;
-            }
-        }
-        if ( check == true){
-           console.log('WIN');
-        }
-        
-    }
-}*/
 
 function tweeningDone() {
     running = false;
