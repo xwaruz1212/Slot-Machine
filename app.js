@@ -3,10 +3,10 @@ document.body.appendChild(app.view);
 
 app.renderer.resize(window.innerWidth, window.innerHeight);
 
-const REEL_SIZE = 160;
+const REEL_SIZE = 150;
 const SYMBOL_SIZE = 150;
 
-const center = 350;
+const center = 650;
 
 var slotTextures;
 
@@ -97,8 +97,8 @@ function createUI(){
     });
    
     const startbutton = new PIXI.Sprite.from('images/spinbutton.png');
-    startbutton.x = 580;
-    startbutton.y = 600;
+    startbutton.x = 670;
+    startbutton.y = 700;
     app.stage.addChild(startbutton);
 
     //spin interactivity
@@ -107,14 +107,14 @@ function createUI(){
     startbutton.addListener( 'pointerdown', onSpinButtonClick)
 
     const titleText = new PIXI.Text('LUCKY DUCKY SLOTS', style)
-    titleText.x = 370;
-    titleText.y = 50;
+    titleText.x = 630;
+    titleText.y = 150;
 
     const masqueradeColor = new PIXI.FillStyle({color: 0xff0000})
 
     const masquerade = (app.screen.height - SYMBOL_SIZE * 3) / 2;
     reelContainer.y = masquerade;
-    reelContainer.x = 500;
+    reelContainer.x = 600;
     const top = new PIXI.Graphics();
     top.beginFill(0, 1);
     top.drawRect(0, 0, app.screen.width, masquerade);
